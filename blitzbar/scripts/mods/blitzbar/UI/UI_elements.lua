@@ -527,6 +527,51 @@ HudElementblitzbar.init = function (self, parent, draw_layer, start_scale)
 		end
 	end
 
+	-- Arbitrator
+	if self._archetype_name == "adamant" then
+		-- Dog shock explosion
+		local whistle = player_talents.adamant_whistle
+		local mine = player_talents.adamant_shock_mine
+		local impact = player_talents.adamant_grenade_improved or player_talents.adamant_grenade
+
+		local grenade = (whistle	and talents.adamant_whistle) or
+						(mine		and talents.adamant_shock_mine) or
+						(impact		and (talents.adamant_grenade_improved or talents.adamant_grenade))
+
+		if grenade then
+			local grenade_ability = grenade.player_ability.ability
+			-- Shock mine replenishes naturally. Lone Wolf "keystone" gives grenade regen to all
+			local replenish_grenade = (player_talents.adamant_whistle == 1) or (player_talents.adamant_disable_companion == 1)
+			local grenades_to_add = 0
+			local replenish_time = 0
+			if player_talents.adamant_disable_companion then
+				grenades_to_add = talents.adamant_disable_companion.format_values.charges.value
+				replenish_time = talents.adamant_disable_companion.format_values.time.value
+			elseif whistle then
+				replenish_time = talents.adamant_whistle.format_values.cooldown.value
+			end
+
+			local adamant_grenade = {
+				display_name =	(whistle and 	mod.text_options["text_option_whistle"]) or
+								(mine and 		mod.text_options["text_option_mine"]) or
+												mod.text_options["text_option_adamant_grenade"],
+				max_stacks = grenade_ability.max_charges + grenades_to_add,
+				max_duration = (replenish_grenade and replenish_time) or nil,
+				decay = true,
+				grenade_ability = true,
+				stack_buff = nil,
+				stacks = 0,
+				progress = 0,
+				timed = replenish_grenade,
+				replenish = replenish_grenade,
+				replenish_buff = (replenish_grenade and "adamant_whistle_replenishment") or (replenish_grenade and "adamant_grenade_replenishment") or nil,
+				damage_per_stack = nil,
+				damage_boost = nil
+			}
+			resource_info = table.clone(adamant_grenade)
+		end
+	end
+
 	if resource_info == nil then
 		resource_info = {
 			display_name = mod.text_options["none"],
