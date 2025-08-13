@@ -182,6 +182,22 @@ local localizations = {
 	},
 
 	-- ##############################
+	-- #        ARBITRATOR          #
+	-- ##############################
+	text_option_whistle = {
+		--en = "Remote Detonation"
+		en = Localize("loc_talent_ability_detonate")
+	},
+	text_option_mine = {
+		--en = "Voltaic Shock Mine"
+		en = Localize("loc_talent_ability_shock_mine")
+	},
+	text_option_adamant_grenade = {
+		--en = "Arbites Grenade"
+		en = Localize("loc_talent_ability_adamant_grenade")
+	},
+
+	-- ##############################
 	-- #           VALUE            #
 	-- ##############################
 	value_decimals = {
@@ -292,6 +308,9 @@ local localizations = {
 		en = "Ogryn",
 		["zh-cn"] = "欧格林",
 	},
+	adamant = {
+		en = "Arbitrator"
+	},
 	_grenade = {
 		en = "Prefer Grenade",
 		["zh-cn"] = "优先手雷",
@@ -381,20 +400,26 @@ for _, color_name in ipairs(color_names) do
 	localizations[color_name] = { en = cf(color_name) .. display_name(color_name) .. "{#reset()}"}
 end
 
-local archetypes = { "psyker", "veteran", "zealot", "ogryn" }
+local archetypes = { "psyker", "veteran", "zealot", "ogryn", "adamant" }
 local options = { "_grenade", "_gauge_text", "_gauge_value", "_gauge_value_text", "_color_full", "_color_empty"}
 for _, archetype in pairs(archetypes) do
+	-- hacky adamant override lol
+	local archetype_for_color = archetype
+	if archetype == "adamant" then
+		archetype_for_color = "veteran"
+	end
+	
 	localizations[archetype .. "_show_gauge"] = {
-		en = cf("ui_" .. archetype) .. localizations[archetype].en .. "{#reset()}"
+		en = cf("ui_" .. archetype_for_color) .. localizations[archetype].en .. "{#reset()}"
     }
 	for language, _ in pairs(localizations[archetype]) do
-		localizations[archetype .. "_show_gauge"][language] = cf("ui_" .. archetype) .. localizations[archetype][language] .. "{#reset()}"
+		localizations[archetype .. "_show_gauge"][language] = cf("ui_" .. archetype_for_color) .. localizations[archetype][language] .. "{#reset()}"
 	end
 	for _, option in pairs(options) do
 		localizations[archetype .. option] = table.clone(localizations[option])
 		localizations[archetype .. option .. "_description"] = table.clone(localizations[option .. "_description"])
 		for language, _ in pairs(localizations[archetype .. option]) do
-			localizations[archetype .. option][language] = cf("ui_" .. archetype .. "_text") .. localizations[archetype .. option][language] .. "{#reset()}"
+			localizations[archetype .. option][language] = cf("ui_" .. archetype_for_color .. "_text") .. localizations[archetype .. option][language] .. "{#reset()}"
 			localizations[archetype .. option .. "_description"][language] = localizations[archetype .. option .. "_description"][language]
 		end
 	end
