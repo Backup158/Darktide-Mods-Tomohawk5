@@ -185,16 +185,16 @@ local localizations = {
 	-- #        ARBITRATOR          #
 	-- ##############################
 	text_option_whistle = {
-		--en = "Remote Detonation"
-		en = Localize("loc_talent_ability_detonate")
+		en = "Dog"
+		--en = Localize("loc_talent_ability_detonate")
 	},
 	text_option_mine = {
-		--en = "Voltaic Shock Mine"
-		en = Localize("loc_talent_ability_shock_mine")
+		en = "Mine"
+		--en = Localize("loc_talent_ability_shock_mine")
 	},
 	text_option_adamant_grenade = {
-		--en = "Arbites Grenade"
-		en = Localize("loc_talent_ability_adamant_grenade")
+		en = "Impact"
+		--en = Localize("loc_talent_ability_adamant_grenade")
 	},
 
 	-- ##############################
