@@ -544,11 +544,14 @@ HudElementblitzbar.init = function (self, parent, draw_layer, start_scale)
 			local replenish_grenade = (player_talents.adamant_whistle == 1) or (player_talents.adamant_disable_companion == 1)
 			local grenades_to_add = 0
 			local replenish_time = 0
+			local replenish_buff_logic = nil -- AND will accept any string, so I need this if/else up here to choose the correct replenish buff to check. otherwise it will always take the first one
 			if player_talents.adamant_disable_companion then
 				grenades_to_add = talents.adamant_disable_companion.format_values.charges.value
 				replenish_time = talents.adamant_disable_companion.format_values.time.value
+				replenish_buff_logic = replenish_grenade and "adamant_grenade_replenishment"
 			elseif whistle then
 				replenish_time = talents.adamant_whistle.format_values.cooldown.value
+				replenish_buff_logic = replenish_grenade and "adamant_whistle_replenishment"
 			end
 
 			local adamant_grenade = {
@@ -564,7 +567,7 @@ HudElementblitzbar.init = function (self, parent, draw_layer, start_scale)
 				progress = 0,
 				timed = replenish_grenade,
 				replenish = replenish_grenade,
-				replenish_buff = (replenish_grenade and "adamant_whistle_replenishment") or (replenish_grenade and "adamant_grenade_replenishment") or nil,
+				replenish_buff = replenish_buff_logic or nil,
 				damage_per_stack = nil,
 				damage_boost = nil
 			}
